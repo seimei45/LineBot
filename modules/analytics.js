@@ -38,7 +38,7 @@ try {
 			}
 		})
 		if (result && result.text) {
-			records.push(result);
+			//records.push(result);
 			return result;
 		}
 
