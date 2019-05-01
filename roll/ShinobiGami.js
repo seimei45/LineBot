@@ -20,7 +20,7 @@ gameType = function () {
     return 'ShinobiGami:hktrpg'
 }
 prefixs = function () {
-    return [/^[.]sg$/i]
+    return /^[.]sg$/i
 }
 getHelpMessage = function () {
     return "【忍神 ShinobiGami】" + "\
@@ -46,7 +46,6 @@ initialize = function () {
 
 rollDiceCommand = function (inputStr, mainMsg) {
     rply.text = '';
-    let result = '';
     if (mainMsg && mainMsg[1])
         result = calldice("ShinobiGami", mainMsg[1])
     if (result && result[0] != 1)

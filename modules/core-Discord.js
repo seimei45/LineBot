@@ -35,9 +35,6 @@ if (process.env.DISCORD_CHANNEL_SECRET) {
 			if (message.author.bot === false && message.content != "") {
 				//	console.log('message.content ' + message.content);
 				//	console.log('channelKeyword ' + channelKeyword);
-				let groupid, userid = ''
-				if (message.channel_id) groupid = message.channel_id
-				if (message.author.id) userid = message.author.id
 				let rplyVal = {};
 				let msgSplitor = (/\S+/ig);
 				let mainMsg = message.content.match(msgSplitor); //定義輸入字串
@@ -56,16 +53,15 @@ if (process.env.DISCORD_CHANNEL_SECRET) {
 				}
 				if (channelKeyword != "" && trigger == channelKeyword.toString().toLowerCase()) {
 					mainMsg.shift();
-					rplyVal = exports.analytics.parseInput(mainMsg.join(' '), groupid, userid);
+					rplyVal = exports.analytics.parseInput(mainMsg.join(' '));
 				} else {
 					if (channelKeyword == "") {
-						rplyVal = exports.analytics.parseInput(mainMsg.join(' '), groupid, userid);
+						rplyVal = exports.analytics.parseInput(mainMsg.join(' '));
 					}
 				}
 				if (rplyVal && rplyVal.text) {
 					Discordcountroll++;
-
-					//console.log('Discord Roll: ' + Discordcountroll + ', Discord Text: ' + Discordcounttext + ' Boot Time: ' + BootTime.toLocaleString(), " content: ", message.content);
+					console.log('Discord Roll: ' + Discordcountroll + ', Discord Text: ' + Discordcounttext + ' Boot Time: ' + BootTime.toLocaleString(), " content: ", message.content);
 
 					if (privatemsg == 1) {
 						message.channel.send("暗骰進行中");
@@ -86,8 +82,7 @@ if (process.env.DISCORD_CHANNEL_SECRET) {
 					//console.log("rplyVal: " + rplyVal);
 				} else {
 					Discordcounttext++;
-					if (Discordcounttext % 500 == 0)
-						console.log('Discord Roll: ' + Discordcountroll + ', Discord Text: ' + Discordcounttext + ' Boot Time: ' + BootTime.toLocaleString());
+					console.log('Discord Roll: ' + Discordcountroll + ', Discord Text: ' + Discordcounttext + ' Boot Time: ' + BootTime.toLocaleString());
 				}
 			}
 		});
