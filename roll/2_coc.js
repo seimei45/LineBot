@@ -6,24 +6,27 @@ var rply = {
 };
 
 gameName = function () {
-	return '克蘇魯神話 cc ccb ccrt ccsu .dp 成長檢定 cc7版創角'
+	return '克蘇魯神話 cc cc1~2 ccn1~2 ccb ccrt ccsu .dp 成長檢定 cc7版創角'
 }
 
 gameType = function () {
 	return 'CoC:hktrpg'
 }
 prefixs = function () {
-	return /(^ccrt$)|(^ccsu$)|(^ccb$)|(^cc$)|(^ccn[1-2]$)|(^cc[1-2]$)|(^[.]dp$)|(^成長檢定$)|(^幕間成長$)|(^cc7版創角$)|(^cc6版創角$)|(^cc7版角色背景$)/i
+	return [/(^ccrt$)|(^ccsu$)|(^cc7版創角$)|(^cc6版創角$)|(^cc7版角色背景$)/i, ,
+		/(^ccb$)|(^cc$)|(^ccn[1-2]$)|(^cc[1-2]$)|(^[.]dp$)|(^成長檢定$)|(^幕間成長$)/i, /^\d+$/]
 }
 getHelpMessage = function () {
 	return "【克蘇魯神話】" + "\
 	\ncoc6版擲骰： ccb 80 技能小於等於80 \
 	\ncoc7版擲骰： cc 80 技能小於等於80 \
+	\ncoc7版獎勵骰： cc(1~2) cc1 80 一粒獎勵骰 \
+	\ncoc7版懲罰骰： ccn(1~2) ccn2 80 兩粒懲罰骰 \
 	\ncoc7版 即時型瘋狂： 啓動語 ccrt  \
 	\ncoc7版 總結型瘋狂： 啓動語 ccsu  \
 	\ncoc6版創角： 啓動語 cc6版創角 \
 	\ncoc7版創角： 啓動語 cc7版創角 (歲數) \
-	\ncoc7 成長或增長檢定： .dp 或 成長檢定 或 幕間成長 (技能) (名稱) \
+	\ncoc7 成長或增長檢定： .dp 或 成長檢定 或 幕間成長 (技能%) (名稱) \
 	\n例）.DP 50 騎馬 | 成長檢定 45 頭槌 | 幕間成長 40 單車\
 	\ncoc7版角色背景隨機生成： 啓動語 cc7版角色背景 \
 		\n "
@@ -477,7 +480,8 @@ function build7char(text01) {
 	if (old < 15) {
 		ReStr = ReStr + '\n等等，核心規則沒有適用小於15歲的人物哦。\n先當成15歲處理\n';
 		old = 15;
-	} if (old >= 90) {
+	}
+	if (old >= 90) {
 		ReStr = ReStr + '\n等等，核心規則沒有適用於90歲以上的人物哦。\n先當成89歲處理\n';
 		old = 89;
 	}

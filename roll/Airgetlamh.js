@@ -1,6 +1,6 @@
 const BCDice = require('bcdice-js').BCDice; // CommonJS
 const bcdice = new BCDice();
-//const records = require('../modules/records.js'); // 新增這行
+
 function calldice(gameType, message) {
     bcdice.setGameByTitle(gameType)
     bcdice.setMessage(message)
@@ -20,7 +20,7 @@ gameType = function () {
     return 'Airgetlamh:hktrpg'
 }
 prefixs = function () {
-    return /^[.]al$/i
+    return [/^[.]al$/i]
 }
 getHelpMessage = function () {
     return "【朱の孤塔のエアゲトラム】" + "\
@@ -36,6 +36,7 @@ initialize = function () {
 
 rollDiceCommand = function (inputStr, mainMsg) {
     rply.text = '';
+    let result = '';
     if (mainMsg && mainMsg[1])
         result = calldice("Airgetlamh", mainMsg[1])
     if (result && result[0] != 1)

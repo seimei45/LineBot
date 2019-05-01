@@ -13,7 +13,7 @@ gameType = function () {
 	return 'funny:hktrpg'
 }
 prefixs = function () {
-	return /^[.]me$|排序|隨機|choice|^每日塔羅|^時間塔羅|^大十字塔羅|立flag|運勢|鴨霸獸/i
+	return [/^[.]me$|排序|隨機|choice|^每日塔羅|^時間塔羅|^大十字塔羅|立flag|運勢|鴨霸獸/i, ]
 }
 getHelpMessage = function () {
 	return "【趣味擲骰】" + "\
@@ -29,9 +29,10 @@ getHelpMessage = function () {
 	\n(啓動語) (句子)(句子)(句子)\
 	\n例子 .me C君殺死了NPC 村民, 受到尼什村通緝!\
 	\n\
-	\n占卜運氣功能： 字句中包括「運勢」兩字即可  \
-	\n塔羅牌占卜 大十字塔羅 每日塔羅\
-	\n時間塔羅 等關键字可啓動  \
+	\n占卜運氣功能： 字句中包括「運勢」兩字及四十字以內  \
+	\n塔羅牌占卜： 「大十字塔羅 每日塔羅 時間塔羅」 等關键字可啓動  \
+	\n\
+	\n隨機死亡FLAG 「立FLAG」可啓動  \
 		\n "
 }
 initialize = function () {
@@ -75,12 +76,12 @@ rollDiceCommand = function (inputStr, mainMsg) {
 			if (mainMsg[0].match(/^時間塔羅/) != null) return MultiDrawTarot(mainMsg[1], mainMsg[2], 1);
 			if (mainMsg[0].match(/^大十字塔羅/) != null) return MultiDrawTarot(mainMsg[1], mainMsg[2], 2);
 			break;
-		case /立flag/i.test(mainMsg[0]):
-			return BStyleFlagSCRIPTS()
-		case /鴨霸獸/i.test(mainMsg[0]):
+		case (/立flag/i.test(mainMsg[0]) && mainMsg[0].toString().match(/[\s\S]{1,25}/g).length <= 1):
+			return BStyleFlagSCRIPTS();
+		case /^鴨霸獸$/i.test(mainMsg[0]):
 			return randomReply();
-		case /運勢/i.test(mainMsg[0]):
-			return randomLuck(mainMsg)
+		case (/運勢/i.test(mainMsg[0]) && mainMsg[0].toString().match(/[\s\S]{1,40}/g).length <= 1):
+			return randomLuck(mainMsg);
 		case /^[.]me$/i.test(mainMsg[0]):
 			return me(inputStr)
 		default:
@@ -123,6 +124,7 @@ function BStyleFlagSCRIPTS() {
 「這段時間我過的很開心啊。」', '\
 把自己的寶物借給其他人，然後說「待一切結束後記得還給我。」', '\
 「真希望這份幸福可以永遠持續下去。」', '\
+「這工作結束後我們兩人一起生活吧！」（この仕事が終わったら2人で暮らそう）', '\
 「我們三個人要永永遠遠在一起！」', '\
 「這是我女兒的照片，很可愛吧？」', '\
 「請告訴他/她，我永遠愛他/她」', '\
@@ -138,24 +140,33 @@ function BStyleFlagSCRIPTS() {
 「躲在這裡就應該不會被發現了吧。」', '\
 「我不會讓任何人死的。」', '\
 「可惡！原來是這麼回事！」', '\
+「嘛 反正以後還有很多機會問的。」', '\
+「你的生命已經如風中殘燭。」', '\
+「沒有手牌場上也沒卡，你還想要贏嗎？」', '\
 「跑這麼遠應該就行了。」', '\
 「我已經甚麼都不怕了（もう何も恐くない）」', '\
 「這XXX是什麼，怎麼之前沒見過（なんだこのXXX、見たことないな）」', '\
 「什麽聲音……？就去看一下吧（:「何の音だ？ちょっと見てくる」', '\
-「是我的錯覺嗎？/果然是錯覺/錯覺吧/可能是我（看/聽）錯了」', '\
+「是我的錯覺嗎？可能是我看錯了」', '\
+「成功了嗎！？」', '\
 「二十年後又是一條好漢！」', '\
 「大人/將軍武運昌隆」', '\
-「這次工作的報酬是以前無法比較的（:「今度の仕事でまとまったカネが入るんだ」', '\）」', '\
+「這次工作的報酬是以前無法比較的（「今度の仕事でまとまったカネが入るんだ」）', '\
 「我才不要和罪犯呆在一起，我回自己的房間去了！（この中に殺人者がいるかもしれないのに、一緒に居られるか!俺は自分の部屋に戻るぞ!）」', '\
 「其實我知道事情的真相…（各種廢話）…犯人就是……」', '\
 「我已經天下無敵了~~」', '\
 「大人！這邊就交給小的吧，請快離開這邊吧」', '\
-「XX，這就是我們流派的最終奧義。這一招我只會演示一次，你看好了！」', '\
+「這就是我們流派的最終奧義。這一招我只會演示一次，你看好了！」', '\
 「誰敢殺我？」', '\
 「從來沒有人能越過我的劍圍。」', '\
 「就算殺死也沒問題吧？」', '\
 「看我塔下強殺！」', '\
 「騙人的吧，我們不是朋友嗎？」', '\
+「不需要大人出手，就交給在下吧」', '\
+「原來只有這種水平嗎」', '\
+「操縱一切的黑手其實是.....」', '\
+「沒看過你呢，你是誰？」', '\
+「外面怎麼這麼吵」', '\
 「我老爸是....你有種就....」', '\
 「我可以好好利用這件事」'];
 	rply.text = rplyArr[Math.floor((Math.random() * (rplyArr.length)) + 0)];
