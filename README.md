@@ -1,4 +1,6 @@
-# RoboYabaso@HKTRPG  V1.0.3：開放原始碼的三合一骰子機器人
+# RoboYabaso@HKTRPG </br> 
+【HKTRPG擲骰BOT】v1.11.240</br> 
+最後更新時間2019-04-19T 11:49:35Z</br> 
 
 關於RoboYabaso
 ==

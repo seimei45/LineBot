@@ -13,7 +13,8 @@ gameType = function () {
 	return 'advroll:hktrpg'
 }
 prefixs = function () {
-	return /^(\d+)(b)(\d+)$|^(\d+)(u)(\d+)$|^d66$|^d66s$/i
+	return [/^(\d+)(b)(\d+)$|^d66s$|^d66$/i, ,
+		/^(\d+)(u)(\d+)$/i, /\d+/]
 }
 getHelpMessage = function () {
 	return "【進階擲骰】" + "\
@@ -69,8 +70,7 @@ function d66(text) {
 	let returnStr = '';
 	if (text != null) {
 		returnStr = 'D66：' + text + ' → ' + rollbase.Dice(6) + rollbase.Dice(6);
-	}
-	else {
+	} else {
 		returnStr = 'D66 → ' + rollbase.Dice(6) + rollbase.Dice(6);
 	}
 	rply.text = returnStr;
@@ -90,8 +90,7 @@ function d66s(text) {
 	}
 	if (text != null) {
 		returnStr = 'D66s：' + text + ' → ' + temp0 + temp1;
-	}
-	else {
+	} else {
 		returnStr = 'D66s → ' + temp0 + temp1;
 	}
 	rply.text = returnStr;
@@ -102,7 +101,7 @@ function d66s(text) {
 ////////////////////////////////////////
 function xBy(triggermsg, text01, text02) {
 	let returnStr = '(' + triggermsg + ')';
-	let match = /^(\d+)(B)(\d+)$/i.exec(triggermsg);  //判斷式  [0]3B8,[1]3,[2]B,[3]8
+	let match = /^(\d+)(B)(\d+)$/i.exec(triggermsg); //判斷式  [0]3B8,[1]3,[2]B,[3]8
 	let varcou = new Array();
 	let varsu = 0;
 	for (var i = 0; i < Number(match[1]); i++) {
@@ -117,8 +116,7 @@ function xBy(triggermsg, text01, text02) {
 		if (text02 == undefined) text02 = '';
 
 		returnStr += ' → ' + varcou + ' → 成功數' + varsu + ' ' + text02;
-	}
-	else {
+	} else {
 		if (text01 == undefined) text01 = '';
 		returnStr += ' → ' + varcou + ' ' + text01;
 	}
@@ -132,13 +130,12 @@ function xBy(triggermsg, text01, text02) {
 ////////////////////////////////////////
 
 function xUy(triggermsg, text01, text02, text03) {
-	var match = /^(\d+)(u)(\d+)/i.exec(triggermsg);	//判斷式  5u19,5,u,19, 
+	var match = /^(\d+)(u)(\d+)/i.exec(triggermsg); //判斷式  5u19,5,u,19, 
 	var returnStr = '(' + triggermsg + '[' + text01 + ']';
 	if (Number(text02) <= Number(match[3]) && text02 != undefined) {
 		returnStr += '>' + text02 + ') → ';
 		if (text03 != undefined) returnStr += text03 + ' → ';
-	}
-	else {
+	} else {
 		returnStr += ') → ';
 		if (text02 != undefined) returnStr += text02 + ' → ';
 	}
@@ -164,8 +161,9 @@ function xUy(triggermsg, text01, text02, text03) {
 
 	}
 	for (var i = 0; i < varcouloop.length; i++) {
-		if (varcouloop[i] == varcou[i]) { returnStr += varcou[i] + ', '; }
-		else returnStr += varcou[i] + '[' + varcouloop[i] + '], ';
+		if (varcouloop[i] == varcou[i]) {
+			returnStr += varcou[i] + ', ';
+		} else returnStr += varcou[i] + '[' + varcouloop[i] + '], ';
 
 	}
 	returnStr = returnStr.replace(/, $/ig, '');
@@ -178,8 +176,7 @@ function xUy(triggermsg, text01, text02, text03) {
 			if (Number(varcou[i]) >= Number(text02)) suc++;
 		}
 		returnStr += ' → 成功数' + suc;
-	}
-	else
+	} else
 	////////////////  (5U10[8]) → 17[10,7],4,5,7,4 → 17/37(最大/合計)
 
 	{

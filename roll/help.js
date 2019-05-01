@@ -14,12 +14,15 @@ var rply = {
 	text: ''
 }; //type是必需的,但可以更改
 //heroku labs:enable runtime-dyno-metadata -a <app name>
+
 var heroku_version = 'v0'
 if (process.env.HEROKU_RELEASE_VERSION)
 	heroku_version = process.env.HEROKU_RELEASE_VERSION;
 var version = "v1." + Object.keys(exports).length + "." + heroku_version.replace(/[v]/, '');
 if (process.env.HEROKU_RELEASE_CREATED_AT)
-	version += '\n最後更新時間' + process.env.HEROKU_RELEASE_CREATED_AT;
+	version += '\n最後更新時間' + new Date(process.env.HEROKU_RELEASE_CREATED_AT).toLocaleString("en-US", {
+		timeZone: "Asia/Shanghai"
+	}).replace('GMT+0800 (GMT+08:00)', '');
 
 gameName = function () {
 	return '骰子機器人HKTRPG說明'
@@ -29,7 +32,7 @@ gameType = function () {
 	return 'bothelp:hktrpg'
 }
 prefixs = function () {
-	return /^bothelp$|^[/]start$/i
+	return [/^bothelp$|^[/]start$/i, /^$|\d+|^all$/i]
 }
 getHelpMessage = function () {
 	return "【HKTRPG擲骰BOT】" + version + "\
@@ -40,6 +43,7 @@ getHelpMessage = function () {
 \n 會輸出）2d6+1：攻撃  9[6+3]+1 = 10\
 \n 如上面一樣,在骰子數字後方隔空白位打字,可以進行發言。\
 \n 5 3D6 ：	分別骰出5次3d6 (最多三十次)\
+\n ((2d6+1)*2)-5/2>=10 ：	支援括號加減乘除及大於小於(>,<,>=,<=)計算\
 \n  \
 \n Line版 https://line.me/R/ti/p/svMLqy9Mik\
 \n Discord版 https://discordapp.com/oauth2/authorize?&client_id=544462904037081138&scope=bot&permissions=8\
