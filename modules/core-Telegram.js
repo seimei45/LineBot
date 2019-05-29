@@ -51,14 +51,14 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 				//mainMsg.shift()
 				//trigger = mainMsg[0].toString().toLowerCase()
 				ctx.message.text = ctx.message.text.replace(/^[d][r][ ]/i, '')
-			
+
 			}
 			if (channelKeyword != '' && trigger == channelKeyword.toString().toLowerCase()) {
 				mainMsg.shift()
-				rplyVal = exports.analytics.parseInput(ctx.message.text, groupid, userid, userrole, exports.analytics.stop)
+				rplyVal = await exports.analytics.parseInput(ctx.message.text, groupid, userid, userrole)
 			} else {
 				if (channelKeyword == '') {
-					rplyVal = exports.analytics.parseInput(ctx.message.text, groupid, userid, userrole, exports.analytics.stop)
+					rplyVal = await exports.analytics.parseInput(ctx.message.text, groupid, userid, userrole)
 
 				}
 

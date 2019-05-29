@@ -24,7 +24,10 @@
     "mongoose": "^5.0.6",
     "telebot": "^1.2.6",
     "telegraf": "^3.29.0",
-    "telegraf-getchatmembers": "^1.0.0"
+    "telegraf-getchatmembers": "^1.0.0",
+    "url-exists": "^1.0.0",
+    "request": "^2.88.0",
+    "cheerio": "^1.0.0-rc.3"
   },
   "keywords": [
     "LeoLi",
