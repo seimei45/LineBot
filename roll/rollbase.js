@@ -44,16 +44,14 @@ rollDiceCommand = async function (inputStr, mainMsg) {
   //let result = {};
   switch (true) {
     default:
+      const urlExistsPromise = url => new Promise((resolve, reject) =>
+        urlExists(url, (err, exists) => err ? reject(err) : resolve(exists)));
 
-      await urlExists("http://www.scp-wiki.net/scp-2197", async function (err, exists) {
-        if (exists) {
-          rply.text = "\n**Foundation database entry found: [SCP-2197](http://www.scp-wiki.net/scp-2197)**\n"
-          console.log(rply)
-
-          return rply;
-        }
-
-      })
+      const exists = await urlExistsPromise("http://www.scp-wiki.net/scp-2197");
+      console.log(exists)
+      if (exists == true)
+        rply.text = "exists";
+      return rply
 
   }
 }
