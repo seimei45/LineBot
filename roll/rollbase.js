@@ -53,10 +53,8 @@ rollDiceCommand = async function (inputStr, mainMsg) {
           return rply;
         }
 
-        return rply;
       })
 
-      return rply;
   }
 }
 
