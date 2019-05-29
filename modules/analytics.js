@@ -99,14 +99,24 @@ async function stop(inputStr, groupid, userid, userrole, mainMsg, trigger, stopm
 		if (findprefixs == 1 && stopmark == 0) {
 			console.log('trigger: ', trigger, ' v: ', v)
 			let tempsave = await exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole)
+			console.log('tempsave', tempsave)
 			if (tempsave)
-				Object.keys(tempsave).forEach(async v => {
+				Object.keys(tempsave).forEach(v => {
 					result[v] = tempsave[v]
+					console.log(tempsave[v])
 				})
+
+
 		}
+
+	})
+	Promise.all(result).then(allResults => {
+		// 在這裡你就會得到一個陣列 裡面有所有Promise的結果
+		console.log('result:', allResults)
+		return allResults
 	})
 
-	return result
+
 
 }
 
