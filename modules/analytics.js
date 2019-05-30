@@ -29,7 +29,7 @@ async function parseInput(inputStr, groupid, userid, userrole) {
 	let trigger = mainMsg[0].toString().toLowerCase(); //指定啟動詞在第一個詞&把大階強制轉成細階
 	//對比mongoose資料
 	//console.log('stop')
-	Object.keys(exports).forEach(v => {
+	await Object.keys(exports).forEach(v => {
 		if (exports[v].initialize().save && exports[v].initialize().save[0].blockfunction && exports[v].initialize().save[0].blockfunction.length > 0) {
 			for (var i = 0; i < exports[v].initialize().save.length; i++) {
 				if ((new RegExp(exports[v].initialize().save[i].blockfunction.join("|"), "i")).test(mainMsg[0]) && exports[v].initialize().save[i].groupid == groupid && exports[v].initialize().save[i].blockfunction.length > 0) {
@@ -42,12 +42,14 @@ async function parseInput(inputStr, groupid, userid, userrole) {
 	})
 
 
-	result = await stop(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark)
-	if (result && result.text) {
-		console.log('inputStr: ', inputStr)
-		return result;
+	result = await stop(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark).then(() => {
+		if (result && result.text) {
+			console.log('inputStr: ', inputStr)
+			return result;
 
-	}
+		}
+
+	})
 
 
 }
@@ -95,28 +97,34 @@ async function stop(inputStr, groupid, userid, userrole, mainMsg, trigger, stopm
 		}
 
 
-
 		if (findprefixs == 1 && stopmark == 0) {
 			console.log('trigger: ', trigger, ' v: ', v)
-			let tempsave = await exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole)
-			console.log('tempsave', tempsave)
-			if (tempsave)
-				Object.keys(tempsave).forEach(v => {
-					result[v] = tempsave[v]
-					console.log(tempsave[v])
-				})
+			//	console.log('tempsave', tempsave)
+
+			async function main() {
+				let tempsave = await Promise.resolve(exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole))
+				console.log('main tempsave', tempsave)
+				//for (key of Object.keys(tempsave)) {
+				//await Promise.resolve(tempsave[key])
+				//}
+			}
+			main().then(() => {
+				console.log('result: ', result)
+				return Promise.resolve(result)
+			})
+
 
 
 		}
 
-	})
+
+	})/*
 	Promise.all(result).then(allResults => {
 		// 在這裡你就會得到一個陣列 裡面有所有Promise的結果
 		console.log('result:', allResults)
 		return allResults
 	})
-
-
+*/
 
 }
 

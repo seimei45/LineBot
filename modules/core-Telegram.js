@@ -59,7 +59,7 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 			} else {
 				if (channelKeyword == '') {
 					rplyVal = await exports.analytics.parseInput(ctx.message.text, groupid, userid, userrole)
-
+					console.log('rplyVal: ', rplyVal)
 				}
 
 			}
