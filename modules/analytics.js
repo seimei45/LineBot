@@ -45,7 +45,7 @@ async function parseInput(inputStr, groupid, userid, userrole) {
 	result = await stop(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark).then(() => {
 		if (result && result.text) {
 			console.log('inputStr: ', inputStr)
-			return result;
+			return Promise.resolve(result);
 
 		}
 
@@ -102,8 +102,8 @@ async function stop(inputStr, groupid, userid, userrole, mainMsg, trigger, stopm
 			//	console.log('tempsave', tempsave)
 
 			async function main() {
-				let tempsave = await Promise.resolve(exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole))
-				console.log('main tempsave', tempsave)
+				result = await Promise.resolve(exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole))
+				//console.log('main tempsave', tempsave)
 				//for (key of Object.keys(tempsave)) {
 				//await Promise.resolve(tempsave[key])
 				//}

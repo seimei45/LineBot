@@ -58,8 +58,10 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 				rplyVal = await exports.analytics.parseInput(ctx.message.text, groupid, userid, userrole)
 			} else {
 				if (channelKeyword == '') {
-					rplyVal = await exports.analytics.parseInput(ctx.message.text, groupid, userid, userrole)
-					console.log('rplyVal: ', rplyVal)
+					rplyVal = await exports.analytics.parseInput(ctx.message.text, groupid, userid, userrole).then(() => {
+						console.log('rplyVal: ', rplyVal)
+
+					})
 				}
 
 			}
