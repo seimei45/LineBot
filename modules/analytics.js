@@ -23,33 +23,74 @@ async function parseInput(inputStr, groupid, userid, userrole) {
 		text: '',
 		type: 'text'
 	};
-	let stopmark = 0;
+	let stopmark = false;
 	let msgSplitor = (/\S+/ig);
 	let mainMsg = inputStr.match(msgSplitor); //定義輸入字串
 	let trigger = mainMsg[0].toString().toLowerCase(); //指定啟動詞在第一個詞&把大階強制轉成細階
 	//對比mongoose資料
 	//console.log('stop')
-	await Object.keys(exports).forEach(v => {
+	//寫成map Promise.resolve  Promise.all then
+
+	/*
+	const list = [] //...an array filled with values
+
+const functionWithPromise = item => { //a function that returns a promise
+  return Promise.resolve('ok')
+}
+
+const anAsyncFunction = async item => {
+  return await functionWithPromise(item)
+}
+
+const getData = async () => {
+  return await Promise.all(list.map(item => anAsyncFunction(item)))
+}
+
+const data = getData()
+console.log(data)
+	*/
+	/*
+	Object.keys(exports).map(async v => {
 		if (exports[v].initialize().save && exports[v].initialize().save[0].blockfunction && exports[v].initialize().save[0].blockfunction.length > 0) {
 			for (var i = 0; i < exports[v].initialize().save.length; i++) {
 				if ((new RegExp(exports[v].initialize().save[i].blockfunction.join("|"), "i")).test(mainMsg[0]) && exports[v].initialize().save[i].groupid == groupid && exports[v].initialize().save[i].blockfunction.length > 0) {
 					console.log('Match AND STOP')
 					stopmark = 1
-
+					
 				}
 			}
 		}
 	})
+	*/
 
+	/*
+	if (exports.z_stop.initialize().save && exports.z_stop.initialize().save[0].blockfunction && exports.z_stop.initialize().save[0].blockfunction.length > 0) {
+		for (var i = 0; i < exports.z_stop.initialize().save.length; i++) {
+			if ((new RegExp(exports.z_stop.initialize().save[i].blockfunction.join("|"), "i")).test(mainMsg[0]) && exports.z_stop.initialize().save[i].groupid == groupid && exports.z_stop.initialize().save[i].blockfunction.length > 0) {
+				console.log('Match AND STOP')
+				stopmark = true
 
-	result = await stop(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark).then(() => {
-		if (result && result.text) {
-			console.log('inputStr: ', inputStr)
-			return Promise.resolve(result);
-
+			}
 		}
+	}
 
-	})
+	//if (stopmark)
+	if (result && result.text) {
+		console.log('inputStr: ', inputStr)
+		return Promise.resolve(result);
+
+	} else {
+		return Promise.resolve(false);
+	}
+
+*/
+//	result = await stop(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark)
+const promiseArray =  Object.keys(exports).map(async(key)=>
+{
+	
+}
+
+)
 
 
 }
@@ -57,9 +98,9 @@ async function parseInput(inputStr, groupid, userid, userrole) {
 async function stop(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark) {
 	//在下面位置開始分析trigger
 	var breakFlag = false;
-	Object.keys(exports).forEach(async v => {
+	const promiseArray = Object.keys(exports).map(async v => {
 		if (breakFlag === true) {
-			return false;
+			return await Promise.resolve(false);
 		}
 		//0 = 不存在
 		//1 = 符合
@@ -101,24 +142,22 @@ async function stop(inputStr, groupid, userid, userrole, mainMsg, trigger, stopm
 			console.log('trigger: ', trigger, ' v: ', v)
 			//	console.log('tempsave', tempsave)
 
-			async function main() {
-				result = await Promise.resolve(exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole))
-				//console.log('main tempsave', tempsave)
-				//for (key of Object.keys(tempsave)) {
-				//await Promise.resolve(tempsave[key])
-				//}
-			}
-			main().then(() => {
-				console.log('result: ', result)
-				return Promise.resolve(result)
-			})
+
+			result = Promise.resolve(exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole))
+			//console.log('main tempsave', tempsave)
+			//for (key of Object.keys(tempsave)) {
+			//await Promise.resolve(tempsave[key])
+			//}
+
 
 
 
 		}
 
 
-	})/*
+	})
+	await Promise.all(promiseArray)
+	/*
 	Promise.all(result).then(allResults => {
 		// 在這裡你就會得到一個陣列 裡面有所有Promise的結果
 		console.log('result:', allResults)
