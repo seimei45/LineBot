@@ -47,7 +47,8 @@ try {
 			console.log('inputStr: ', inputStr)
 			return result;
 
-		}
+		} else
+			return;
 
 
 	}
