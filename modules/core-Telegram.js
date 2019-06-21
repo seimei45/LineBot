@@ -68,7 +68,7 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 
 			}
 
-			if (rplyVal && rplyVal.text) {
+			if (rplyVal && rplyVal[0].text) {
 				TGcountroll++;
 				if (groupid && userid) {
 					//285083923223
@@ -79,23 +79,27 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 
 				//console.log('rplyVal.text:' + rplyVal.text)
 				//console.log('Telegram Roll: ' + TGcountroll + ', Telegram Text: ' + TGcounttext, " content: ", message.text);
+
 				if (privatemsg == 1) {
 					//console.log('DR2')
 					if (ctx.chat.type == 'group')
 						ctx.reply(displayname + ' 暗骰進行中')
 					//ctx.reply(ctx.message.from.first_name + ' 暗骰進行中')
+
 					async function loada() {
-						for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
-							await ctx.telegram.sendMessage(ctx.message.from.id, rplyVal.text.toString().match(/[\s\S]{1,2000}/g)[i])
-						}
+						for (var a = 0; a < rplyVal.length; a++)
+							for (var i = 0; i < rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
+								await ctx.telegram.sendMessage(ctx.message.from.id, rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g)[i])
+							}
 					}
 					loada();
 				} else {
 
 					async function loadb() {
-						for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
-							await ctx.reply(rplyVal.text.toString().match(/[\s\S]{1,2000}/g)[i])
-						}
+						for (var a = 0; a < rplyVal.length; a++)
+							for (var i = 0; i < rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
+								await ctx.reply(rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g)[i])
+							}
 					}
 					loadb();
 

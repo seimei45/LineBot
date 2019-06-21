@@ -7,10 +7,7 @@ require('fs').readdirSync('./roll/').forEach(function (file) {
 	}
 });
 try {
-	let result = {
-		text: '',
-		type: 'text'
-	};
+	let result = [];
 
 	//用來呼叫骰組,新增骰組的話,要寫條件式到下面呼叫 
 	//格式是 exports.骰組檔案名字.function名
@@ -19,10 +16,9 @@ try {
 		_isNaN = function (obj) {
 			return isNaN(parseInt(obj));
 		}
-		result = {
-			text: '',
-			type: 'text'
-		};
+		result = [];
+
+
 		let stopmark = 0;
 		let msgSplitor = (/\S+/ig);
 		let mainMsg = inputStr.match(msgSplitor); //定義輸入字串
@@ -42,8 +38,11 @@ try {
 		})
 
 
-		result = callback(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark)
-		if (result && result.text) {
+		result = new Array(stop(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark))
+		result[1] = {
+			text: 'sd'
+		}
+		if (result && result[0].text) {
 			console.log('inputStr: ', inputStr)
 			return result;
 
