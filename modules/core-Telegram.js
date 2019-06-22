@@ -59,22 +59,22 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 			}
 			if (channelKeyword != '' && trigger == channelKeyword.toString().toLowerCase()) {
 				mainMsg.shift()
-				rplyVal = exports.analytics.parseInput(ctx.message.text, groupid, userid, userrole, exports.analytics.stop)
+				rplyVal = exports.analytics.parseInput(ctx.message.text, groupid, userid, userrole)
 			} else {
 				if (channelKeyword == '') {
-					rplyVal = exports.analytics.parseInput(ctx.message.text, groupid, userid, userrole, exports.analytics.stop)
+					rplyVal = exports.analytics.parseInput(ctx.message.text, groupid, userid, userrole)
 
 				}
 
 			}
 
-			if (rplyVal && rplyVal[0].text) {
+			if (rplyVal && ((rplyVal[0] && rplyVal[0].text) || (rplyVal[1] && rplyVal[1].text))) {
 				TGcountroll++;
-				if (groupid && userid) {
+				if (groupid && userid && rplyVal[0] && rplyVal[0].text) {
 					//285083923223
 					displayname = "@" + ctx.message.from.username + " ";
 					if (displaynamecheck)
-						rplyVal.text = displayname + rplyVal.text
+						rplyVal[0].text = displayname + rplyVal[0].text
 				}
 
 				//console.log('rplyVal.text:' + rplyVal.text)
@@ -88,18 +88,20 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 
 					async function loada() {
 						for (var a = 0; a < rplyVal.length; a++)
-							for (var i = 0; i < rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
-								await ctx.telegram.sendMessage(ctx.message.from.id, rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g)[i])
-							}
+							if (rplyVal[a] && rplyVal[a.text])
+								for (var i = 0; i < rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
+									await ctx.telegram.sendMessage(ctx.message.from.id, rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g)[i])
+								}
 					}
 					loada();
 				} else {
 
 					async function loadb() {
 						for (var a = 0; a < rplyVal.length; a++)
-							for (var i = 0; i < rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
-								await ctx.reply(rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g)[i])
-							}
+							if (rplyVal[a] && rplyVal[a].text)
+								for (var i = 0; i < rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
+									await ctx.reply(rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g)[i])
+								}
 					}
 					loadb();
 
