@@ -18,7 +18,7 @@ try {
         return 'trpglevel:hktrpg'
     }
     prefixs = function () {
-        return [/(^[.]lv$)/ig, ]
+        return [/(^[.]lv$)/ig, /\S/]
     }
     getHelpMessage = function () {
         return "【資料庫功能】" + "\
@@ -34,7 +34,9 @@ try {
     \n 如使用輸入.dbp 會變成全服版,全服可看, 可用add show功能 \
     \n "
     }
-    initialize = function () {
+    initialize = function (inputStr, groupid, userid, userrole, mainMsg, trigger) {
+        //當有回覆,這裡增加XP, 如果XP到達升LV 程度, return 升LV資訊
+        //5 * (lvl ^ 2) + 50 * lvl + 100
         return rply;
     }
 

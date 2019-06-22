@@ -52,7 +52,7 @@ try {
 	}
 
 	function level(inputStr, groupid, userid, userrole, mainMsg, trigger) {
-		return;
+		return exports.z_stop.initialize();
 	}
 
 	function roll(inputStr, groupid, userid, userrole, mainMsg, trigger) {
