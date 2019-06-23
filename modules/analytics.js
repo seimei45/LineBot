@@ -58,7 +58,7 @@ try {
 	function roll(inputStr, groupid, userid, userrole, mainMsg, trigger) {
 		//在下面位置開始分析trigger
 		var breakFlag = false;
-		Object.keys(exports).forEach(v => {
+		Object.keys(exports).map(v => {
 			if (breakFlag === true) {
 				return false;
 			}
@@ -97,15 +97,18 @@ try {
 				}
 			}
 
-
-
 			if (findprefixs == 1) {
 				console.log('trigger: ', trigger, ' v: ', v)
 				let tempsave = exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole)
-				if (tempsave)
-					Object.keys(tempsave).forEach(v => {
+				if (tempsave) {
+					Object.keys(tempsave).map(v => {
 						result[v] = tempsave[v]
 					})
+
+				}
+				/*		Object.keys(tempsave).forEach(v => {
+						result[v] = tempsave[v]
+									})*/
 			}
 		})
 

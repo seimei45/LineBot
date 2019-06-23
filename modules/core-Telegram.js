@@ -25,7 +25,9 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 			//	telegrafGetChatMembers.check(ctx.chat.id) //[Members]
 			//	telegrafGetChatMembers.all //[Chats]
 			let groupid, userid, displayname = ''
+
 			let displaynamecheck = true;
+			//顯示使用者名字
 			let userrole = 1;
 			//console.log('TG: ', message)
 
@@ -45,6 +47,9 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 			if (trigger == ".me") {
 				displaynamecheck = false
 			}
+			//顯示使用者名字
+
+
 			// 訊息來到後, 會自動跳到analytics.js進行骰組分析
 			// 如希望增加修改骰組,只要修改analytics.js的條件式 和ROLL內的骰組檔案即可,然後在HELP.JS 增加說明.
 
@@ -67,7 +72,7 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 				}
 
 			}
-
+			//可以多項回覆
 			if (rplyVal && ((rplyVal[0] && rplyVal[0].text) || (rplyVal[1] && rplyVal[1].text))) {
 				TGcountroll++;
 				if (groupid && userid && rplyVal[0] && rplyVal[0].text) {
@@ -88,7 +93,7 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 
 					async function loada() {
 						for (var a = 0; a < rplyVal.length; a++)
-							if (rplyVal[a] && rplyVal[a.text])
+							if (rplyVal[a] && rplyVal[a.text]) //多項回覆
 								for (var i = 0; i < rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
 									await ctx.telegram.sendMessage(ctx.message.from.id, rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g)[i])
 								}
@@ -97,7 +102,7 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 				} else {
 
 					async function loadb() {
-						for (var a = 0; a < rplyVal.length; a++)
+						for (var a = 0; a < rplyVal.length; a++) //多項回覆
 							if (rplyVal[a] && rplyVal[a].text)
 								for (var i = 0; i < rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
 									await ctx.reply(rplyVal[a].text.toString().match(/[\s\S]{1,2000}/g)[i])

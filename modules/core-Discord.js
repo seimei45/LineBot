@@ -36,7 +36,7 @@ if (process.env.DISCORD_CHANNEL_SECRET) {
 				//	console.log('message.content ' + message.content);
 				//	console.log('channelKeyword ' + channelKeyword);
 				let groupid, userid, displayname = ''
-				let displaynamecheck = true;
+				let displaynamecheck = true; //顯示使用者名字
 				let userrole = 1;
 				//console.log(message.guild)
 				if (message.guild && message.guild.id) groupid = message.guild.id
@@ -53,6 +53,7 @@ if (process.env.DISCORD_CHANNEL_SECRET) {
 				if (trigger == ".me") {
 					displaynamecheck = false
 				}
+				//顯示使用者名字
 				let privatemsg = 0;
 				//訊息來到後, 會自動跳到analytics.js進行骰組分析
 				//如希望增加修改骰組,只要修改analytics.js的條件式 和ROLL內的骰組檔案即可,然後在HELP.JS 增加說明.
@@ -66,20 +67,20 @@ if (process.env.DISCORD_CHANNEL_SECRET) {
 				}
 				if (channelKeyword != "" && trigger == channelKeyword.toString().toLowerCase()) {
 					//mainMsg.shift();
-					rplyVal = exports.analytics.parseInput(message.content, groupid, userid, userrole, exports.analytics.stop);
+					rplyVal = exports.analytics.parseInput(message.content, groupid, userid, userrole);
 				} else {
 					if (channelKeyword == "") {
-						rplyVal = exports.analytics.parseInput(message.content, groupid, userid, userrole, exports.analytics.stop);
+						rplyVal = exports.analytics.parseInput(message.content, groupid, userid, userrole);
 					}
 				}
 
-				if (rplyVal && rplyVal.text) {
+				if (rplyVal && ((rplyVal[0] && rplyVal[0].text) || (rplyVal[1] && rplyVal[1].text))) {
 					Discordcountroll++;
-					if (groupid && userid) {
+					if (groupid && userid && rplyVal[0] && rplyVal[0].text) {
 						//DISCORD: 585040823232320107
 						displayname = "<@" + userid + "> "
 						if (displaynamecheck)
-							rplyVal.text = displayname + rplyVal.text
+							rplyVal[0].text = displayname + rplyVal[0].text
 					}
 
 
@@ -88,16 +89,20 @@ if (process.env.DISCORD_CHANNEL_SECRET) {
 					if (privatemsg == 1) {
 						message.channel.send(displayname + " 暗骰進行中");
 						async function loada() {
-							for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
-								await message.author.send(rplyVal.text.toString().match(/[\s\S]{1,2000}/g)[i]);
-							}
+							for (var a = 0; a < rplyVal.length; a++)
+								if (rplyVal[a] && rplyVal[a.text]) //多項回覆
+									for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
+										await message.author.send(rplyVal.text.toString().match(/[\s\S]{1,2000}/g)[i]);
+									}
 						}
 						loada();
 					} else {
 						async function loadb() {
-							for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
-								await message.channel.send(rplyVal.text.toString().match(/[\s\S]{1,2000}/g)[i])
-							}
+							for (var a = 0; a < rplyVal.length; a++) //多項回覆
+								if (rplyVal[a] && rplyVal[a].text)
+									for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
+										await message.channel.send(rplyVal.text.toString().match(/[\s\S]{1,2000}/g)[i])
+									}
 						}
 						loadb();
 					}

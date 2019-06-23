@@ -74,6 +74,8 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 		if (event.source.groupId) roomorgroupid = event.source.groupId
 		if (event.source.roomId) roomorgroupid = event.source.roomId
 		if (event.source.userId) userid = event.source.userId
+		let displaynamecheck = true;
+		//顯示使用者名字
 		//Ub23daads22a2131312334645349a3 
 		let rplyVal = {};
 		let msgSplitor = (/\S+/ig)
@@ -87,6 +89,7 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 		if (trigger == ".me") {
 			displaynamecheck = false
 		}
+		//顯示使用者名字
 
 		let privatemsg = 0
 		if (trigger.match(/^dr/i) && mainMsg && mainMsg[1]) {
@@ -98,23 +101,23 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 		}
 		if (channelKeyword != '' && trigger == channelKeyword.toString().toLowerCase()) {
 			//mainMsg.shift()
-			rplyVal = exports.analytics.parseInput(event.message.text, roomorgroupid, userid, userrole, exports.analytics.stop)
+			rplyVal = exports.analytics.parseInput(event.message.text, roomorgroupid, userid, userrole)
 		} else {
 			if (channelKeyword == '') {
-				rplyVal = exports.analytics.parseInput(event.message.text, roomorgroupid, userid, userrole, exports.analytics.stop)
+				rplyVal = exports.analytics.parseInput(event.message.text, roomorgroupid, userid, userrole)
 
 			}
 
 		}
-
-		if (rplyVal && rplyVal.text) {
+		//可以多項回覆
+		if (rplyVal && ((rplyVal[0] && rplyVal[0].text) || (rplyVal[1] && rplyVal[1].text))) {
 			Linecountroll++;
 
 			try {
-				if (roomorgroupid && userid && displaynamecheck)
+				if (roomorgroupid && userid && displaynamecheck && rplyVal[0] && rplyVal[0].text)
 					client.getProfile(userid).then(function (profile) {
 						displayname = profile.displayName;
-						rplyVal.text = "@" + displayname + " " + rplyVal.text
+						rplyVal[0].text = "@" + displayname + " " + rplyVal[0].text
 						//console.log(profile.displayName)
 						//console.log(profile)
 						//console.log('rplyVal.text:' + rplyVal.text)
@@ -122,8 +125,9 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 						sendmessage()
 					});
 				else sendmessage()
+			} catch (e) {
+				console.log(e)
 			}
-			catch (e) { console.log(e) }
 			//console.log("LINE:" , event)
 
 
@@ -136,33 +140,37 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 		function sendmessage() {
 			if (privatemsg == 1) {
 				client.pushMessage(roomorgroupid, replymessage(displayname + ' 暗骰進行中'))
-					.then(() => { })
+					.then(() => {})
 					.catch((err) => {
 						// error handling
 					});
 				//message.reply.text(message.from.first_name + ' 暗骰進行中')
 				async function loada() {
-					for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,1200}/g).length; i++) {
-						await client.pushMessage(userid, replymessage(rplyVal.text.toString().match(/[\s\S]{1,1200}/g)[i]))
-							.then(() => { })
-							.catch((err) => {
-								// error handling
-							});
-					}
+					for (var a = 0; a < rplyVal.length; a++)
+						if (rplyVal[a] && rplyVal[a.text]) //多項回覆
+							for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,1200}/g).length; i++) {
+								await client.pushMessage(userid, replymessage(rplyVal.text.toString().match(/[\s\S]{1,1200}/g)[i]))
+									.then(() => {})
+									.catch((err) => {
+										// error handling
+									});
+							}
 				}
 				loada();
 			} else {
 				async function loadb() {
-					for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,1200}/g).length; i++) {
-						if (roomorgroupid)
-							var replyTarget = roomorgroupid
-						else replyTarget = userid
-						await client.pushMessage(replyTarget, replymessage(rplyVal.text.toString().match(/[\s\S]{1,1200}/g)[i]))
-							.then(() => { })
-							.catch((err) => {
-								// error handling
-							});
-					}
+					for (var a = 0; a < rplyVal.length; a++) //多項回覆
+						if (rplyVal[a] && rplyVal[a].text)
+							for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,1200}/g).length; i++) {
+								if (roomorgroupid)
+									var replyTarget = roomorgroupid
+								else replyTarget = userid
+								await client.pushMessage(replyTarget, replymessage(rplyVal.text.toString().match(/[\s\S]{1,1200}/g)[i]))
+									.then(() => {})
+									.catch((err) => {
+										// error handling
+									});
+							}
 				}
 				loadb();
 
@@ -177,16 +185,16 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 		//Reply Max: 1200 characters
 	}
 	// listen on port
-	const port = process.env.PORT || 5000;
-	app.listen(port, () => {
-		console.log(`Line BOT listening on ${port}`);
-	});
+	/*	const port = process.env.PORT || 5000;
+		app.listen(port, () => {
+			console.log(`Line BOT listening on ${port}`);
+		});
 
-	app.get('/', function (req, res) {
-		//	res.send(parseInput(req.query.input));
-		res.send('Hello');
-	});
+		app.get('/', function (req, res) {
+			//	res.send(parseInput(req.query.input));
+			res.send('Hello');
+		});
 
-
+	*/
 
 }
