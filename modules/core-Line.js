@@ -148,8 +148,8 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 				async function loada() {
 					for (var a = 0; a < rplyVal.length; a++)
 						if (rplyVal[a] && rplyVal[a.text]) //多項回覆
-							for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,1200}/g).length; i++) {
-								await client.pushMessage(userid, replymessage(rplyVal.text.toString().match(/[\s\S]{1,1200}/g)[i]))
+							for (var i = 0; i < rplyVal[a].text.toString().match(/[\s\S]{1,1200}/g).length; i++) {
+								await client.pushMessage(userid, replymessage(rplyVal[a].text.toString().match(/[\s\S]{1,1200}/g)[i]))
 									.then(() => {})
 									.catch((err) => {
 										// error handling
@@ -161,11 +161,11 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 				async function loadb() {
 					for (var a = 0; a < rplyVal.length; a++) //多項回覆
 						if (rplyVal[a] && rplyVal[a].text)
-							for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,1200}/g).length; i++) {
+							for (var i = 0; i < rplyVal[a].text.toString().match(/[\s\S]{1,1200}/g).length; i++) {
 								if (roomorgroupid)
 									var replyTarget = roomorgroupid
 								else replyTarget = userid
-								await client.pushMessage(replyTarget, replymessage(rplyVal.text.toString().match(/[\s\S]{1,1200}/g)[i]))
+								await client.pushMessage(replyTarget, replymessage(rplyVal[a].text.toString().match(/[\s\S]{1,1200}/g)[i]))
 									.then(() => {})
 									.catch((err) => {
 										// error handling
