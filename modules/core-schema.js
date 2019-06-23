@@ -39,20 +39,28 @@ if (process.env.mongoURL) {
     });
     const GroupSetting = mongoose.model('GroupSetting', {
         groupid: String,
-        togm: Array,
+        togm: {
+            //暗骰同時給對方
+            gm: Array
+        },
         user: [{
             userid: {
                 type: String,
                 required: true
             },
             name: String,
+            togm: Boolean,
             date: {
                 type: Date,
                 default: Date.now
             },
             limit: Number,
+            //
             Permission: String,
-            Abiliy: Array
+            Abiliy: Array,
+            XP: String,
+            Level: String,
+            Class: String,
         }]
     });
 
@@ -73,7 +81,7 @@ if (process.env.mongoURL) {
         default: String,
         text: String,
         type: String
-    
+
     });
     */
 }
