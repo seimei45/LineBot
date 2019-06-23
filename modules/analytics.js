@@ -11,7 +11,7 @@ try {
 
 	//用來呼叫骰組,新增骰組的話,要寫條件式到下面呼叫 
 	//格式是 exports.骰組檔案名字.function名
-	function parseInput(inputStr, groupid, userid, userrole) {
+	module.exports.parseInput = async function parseInput(inputStr, groupid, userid, userrole) {
 		//console.log('InputStr: ' + inputStr);
 		_isNaN = function (obj) {
 			return isNaN(parseInt(obj));
@@ -37,13 +37,15 @@ try {
 		}
 		//})
 
-		if (stopmark == 0)
-			result[0] = roll(inputStr, groupid, userid, userrole, mainMsg, trigger)
-		result[1] = level(inputStr, groupid, userid, userrole, mainMsg, trigger)
+		if (stopmark == 0) {
+			result[0] = await roll(inputStr, groupid, userid, userrole, mainMsg, trigger)
+			console.log('aaaa', await roll(inputStr, groupid, userid, userrole, mainMsg, trigger))
+		}
+		result[1] = await level(inputStr, groupid, userid, userrole, mainMsg, trigger)
 
 		if (result && ((result[0] && result[0].text) || (result[1] && result[1].text))) {
 			console.log('inputStr: ', inputStr)
-			return result;
+			return await result;
 
 		} else
 			return;
@@ -55,10 +57,10 @@ try {
 		return exports.z_stop.initialize();
 	}
 
-	function roll(inputStr, groupid, userid, userrole, mainMsg, trigger) {
+	async function roll(inputStr, groupid, userid, userrole, mainMsg, trigger) {
 		//在下面位置開始分析trigger
 		var breakFlag = false;
-		Object.keys(exports).map(v => {
+		Object.keys(exports).map(async v => {
 			if (breakFlag === true) {
 				return false;
 			}
@@ -99,10 +101,12 @@ try {
 
 			if (findprefixs == 1) {
 				console.log('trigger: ', trigger, ' v: ', v)
-				let tempsave = exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole)
+				let tempsave = await exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole)
+				console.log(await exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole))
 				if (tempsave) {
-					Object.keys(tempsave).map(v => {
-						result[v] = tempsave[v]
+					Object.keys(tempsave).map(async v => {
+						result[v] = await tempsave[v]
+						return await result
 					})
 
 				}
@@ -112,7 +116,7 @@ try {
 			}
 		})
 
-		return result
+		//return result
 
 	}
 
@@ -120,7 +124,3 @@ try {
 } catch (e) {
 	console.log('error: ' + e)
 }
-
-module.exports = {
-	parseInput: parseInput
-};
