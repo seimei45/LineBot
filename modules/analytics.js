@@ -18,7 +18,7 @@ try {
 		}
 		result = [];
 
-
+		var debugmode = true;
 		let stopmark = 0;
 		let msgSplitor = (/\S+/ig);
 		let mainMsg = inputStr.match(msgSplitor); //定義輸入字串
@@ -39,7 +39,8 @@ try {
 
 		if (stopmark == 0) {
 			result[0] = await roll(inputStr, groupid, userid, userrole, mainMsg, trigger)
-			console.log('aaaa', await roll(inputStr, groupid, userid, userrole, mainMsg, trigger))
+			if (debugmode)
+				console.log('result[0]  parseInput1', await roll(inputStr, groupid, userid, userrole, mainMsg, trigger))
 		}
 		result[1] = await level(inputStr, groupid, userid, userrole, mainMsg, trigger)
 
@@ -60,6 +61,7 @@ try {
 	async function roll(inputStr, groupid, userid, userrole, mainMsg, trigger) {
 		//在下面位置開始分析trigger
 		var breakFlag = false;
+		
 		Object.keys(exports).map(async v => {
 			if (breakFlag === true) {
 				return false;
@@ -101,12 +103,13 @@ try {
 
 			if (findprefixs == 1) {
 				console.log('trigger: ', trigger, ' v: ', v)
-				let tempsave = await exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole)
-				console.log(await exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole))
+				tempsave = await exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole)
+				//if (debugmode)
+				console.log('tempsave', await exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole))
 				if (tempsave) {
-					Object.keys(tempsave).map(async v => {
-						result[v] = await tempsave[v]
-						return await result
+					Object.keys(tempsave).forEach(v => {
+						result[v] = tempsave[v]
+						return result
 					})
 
 				}
