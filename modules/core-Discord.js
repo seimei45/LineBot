@@ -78,7 +78,7 @@ if (process.env.DISCORD_CHANNEL_SECRET) {
 					Discordcountroll++;
 					if (groupid && userid && rplyVal[0] && rplyVal[0].text) {
 						//DISCORD: 585040823232320107
-						displayname = "<@" + userid + "> "
+						displayname = "<@" + userid + ">\n"
 						if (displaynamecheck)
 							rplyVal[0].text = displayname + rplyVal[0].text
 					}

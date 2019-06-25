@@ -118,7 +118,7 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 			if (roomorgroupid && userid && displaynamecheck && rplyVal[0] && rplyVal[0].text)
 				client.getProfile(userid).then(function (profile) {
 					displayname = profile.displayName;
-					rplyVal[0].text = "@" + displayname + " " + rplyVal[0].text
+					rplyVal[0].text = "@" + displayname + "\n" + rplyVal[0].text
 					//console.log(profile.displayName)
 					//console.log(profile)
 					//console.log('rplyVal.text:' + rplyVal.text)

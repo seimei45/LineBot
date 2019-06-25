@@ -78,7 +78,7 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 				TGcountroll++;
 				if (groupid && userid && rplyVal[0] && rplyVal[0].text) {
 					//285083923223
-					displayname = "@" + ctx.message.from.username + " ";
+					displayname = "@" + ctx.message.from.username + "\n";
 					if (displaynamecheck)
 						rplyVal[0].text = displayname + rplyVal[0].text
 				}
