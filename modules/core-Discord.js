@@ -30,8 +30,11 @@ if (process.env.DISCORD_CHANNEL_SECRET) {
 			console.log('unhandledRejection: ', error.message);
 		});
 
+		client.on('guildMemberAdd', async member => {
+			member.guild.channels.get('channelID').send("Welcome");
+		});
 
-		client.on('message', message => {
+		client.on('message', async message => {
 			if (message.author.bot === false && message.content != "") {
 				//	console.log('message.content ' + message.content);
 				//	console.log('channelKeyword ' + channelKeyword);

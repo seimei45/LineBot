@@ -18,6 +18,8 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 		const telegrafGetChatMembers = require('telegraf-getchatmembers')
 
 		TGclient.use(telegrafGetChatMembers)
+		TGclient.on('new_chat_members', async (ctx) => console.log(ctx.message.new_chat_members))
+		TGclient.on('left_chat_member', async (ctx) => console.log(ctx.message.left_chat_member))
 
 		TGclient.on('text', async (ctx) => {
 			//console.log(ctx.getChatMembers(ctx.chat.id) //[Members]

@@ -9,12 +9,10 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 			exports[name] = require('../modules/' + file);
 		}
 	});
-	let debugmode = true;
 	var Linecountroll = 0;
 	var Linecounttext = 0;
 	const line = require('@line/bot-sdk');
 	const express = require('express');
-
 	function replymessage(message) {
 		return {
 			type: 'text',
@@ -65,7 +63,73 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 	});
 	// event handler
 	function handleEvent(event) {
-		if (event.type !== 'message' || event.message.type !== 'text') {
+		if (event.replyToken && event.replyToken.match(/^(.)\1*$/)) {
+			return console.log("Test hook recieved: " + JSON.stringify(event.message));
+		}
+		switch (event.type) {
+			case 'message':
+				const message = event.message;
+				switch (message.type) {
+					case 'text':
+						return handleText(event);
+					case 'image':
+						return null;
+					case 'video':
+						return null;
+					case 'audio':
+						return null;
+					case 'location':
+						return null;
+					case 'sticker':
+						return null;
+					default:
+						throw new Error(`Unknown message: ${JSON.stringify(message)}`);
+				}
+
+			case 'follow':
+				return null;
+
+			case 'unfollow':
+				return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
+
+			case 'join':
+				return null;
+
+			case 'leave':
+				return console.log(`Left: ${JSON.stringify(event)}`);
+
+			case 'postback':
+				return null
+
+			case 'beacon':
+				return null;
+
+			default:
+				throw new Error(`Unknown event: ${JSON.stringify(event)}`);
+		}
+	}
+	// listen on port
+	/*	const port = process.env.PORT || 5000;
+		app.listen(port, () => {
+			console.log(`Line BOT listening on ${port}`);
+		});
+
+		app.get('/', function (req, res) {
+			//	res.send(parseInput(req.query.input));
+			res.send('Hello');
+		});
+
+	*/
+	app.on('UnhandledPromiseRejection', error => {
+		// Will print "unhandledRejection err is not defined"
+		console.log('UnhandledPromiseRejection: ', error.message);
+	});
+	app.on('unhandledRejection', error => {
+		// Will print "unhandledRejection err is not defined"
+		console.log('unhandledRejection: ', error.message);
+	});
+	function handleText(event) {
+		if (event.message.type !== 'text') {
 			// ignore non-text-message event
 			return Promise.resolve(null);
 		}
@@ -133,10 +197,7 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 				sendmessage()
 				//	對方不在GP CHANNEL的話就跳到這裡
 			}
-
 			//console.log("LINE:" , event)
-
-
 		} else {
 			Linecounttext++;
 			if (Linecounttext % 500 == 0)
@@ -146,7 +207,7 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 		function sendmessage() {
 			if (privatemsg == 1) {
 				client.pushMessage(roomorgroupid, replymessage(displayname + ' 暗骰進行中'))
-					.then(() => {})
+					.then(() => { })
 					.catch((err) => {
 						// error handling
 					});
@@ -156,7 +217,7 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 						if (rplyVal[a] && rplyVal[a.text]) //多項回覆
 							for (var i = 0; i < rplyVal[a].text.toString().match(/[\s\S]{1,1900}/g).length; i++) {
 								await client.pushMessage(userid, replymessage(rplyVal[a].text.toString().match(/[\s\S]{1,1900}/g)[i]))
-									.then(() => {})
+									.then(() => { })
 									.catch((err) => {
 										// error handling
 									});
@@ -172,7 +233,7 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 									var replyTarget = roomorgroupid
 								else replyTarget = userid
 								await client.pushMessage(replyTarget, replymessage(rplyVal[a].text.toString().match(/[\s\S]{1,1900}/g)[i]))
-									.then(() => {})
+									.then(() => { })
 									.catch((err) => {
 										// error handling
 									});
@@ -190,26 +251,6 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 		// use reply API
 		//Reply Max: 1900 characters
 	}
-	// listen on port
-	/*	const port = process.env.PORT || 5000;
-		app.listen(port, () => {
-			console.log(`Line BOT listening on ${port}`);
-		});
-
-		app.get('/', function (req, res) {
-			//	res.send(parseInput(req.query.input));
-			res.send('Hello');
-		});
-
-	*/
-	app.on('UnhandledPromiseRejection', error => {
-		// Will print "unhandledRejection err is not defined"
-		console.log('UnhandledPromiseRejection: ', error.message);
-	});
-	app.on('unhandledRejection', error => {
-		// Will print "unhandledRejection err is not defined"
-		console.log('unhandledRejection: ', error.message);
-	});
 	module.exports = {
 		app,
 		express
