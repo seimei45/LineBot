@@ -32,6 +32,7 @@ if (process.env.DISCORD_CHANNEL_SECRET) {
 
 		client.on('guildMemberAdd', async member => {
 			//member.guild.channels.get('channelID').send("Welcome");
+		
 		});
 
 		client.on('message', async message => {
