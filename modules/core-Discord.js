@@ -34,6 +34,10 @@ if (process.env.DISCORD_CHANNEL_SECRET) {
 			//member.guild.channels.get('channelID').send("Welcome");
 		
 		});
+		client.on('guildMemberRemove', async member => {
+			//member.guild.channels.get('channelID').send("Welcome");
+		
+		});
 
 		client.on('message', async message => {
 			if (message.author.bot === false && message.content != "") {
