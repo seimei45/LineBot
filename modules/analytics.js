@@ -14,7 +14,7 @@ try {
 
 	//用來呼叫骰組,新增骰組的話,要寫條件式到下面呼叫 
 	//格式是 exports.骰組檔案名字.function名
-	function parseInput(inputStr, groupid, userid, userrole, callback) {
+	function parseInput(inputStr, groupid, userid, userrole) {
 		//console.log('InputStr: ' + inputStr);
 		_isNaN = function (obj) {
 			return isNaN(parseInt(obj));
@@ -29,20 +29,11 @@ try {
 		let trigger = mainMsg[0].toString().toLowerCase(); //指定啟動詞在第一個詞&把大階強制轉成細階
 		//對比mongoose資料
 		//console.log('stop')
-		function z_stop() {
-			if (exports.z_stop && exports.z_stop.initialize() && exports.z_stop.initialize().save && exports.z_stop.initialize().save[0].blockfunction && exports.z_stop.initialize().save[0].blockfunction.length > 0) {
-				for (var i = 0; i < exports.z_stop.initialize().save.length; i++) {
-					if ((new RegExp(exports.z_stop.initialize().save[i].blockfunction.join("|"), "i")).test(mainMsg[0]) && exports.z_stop.initialize().save[i].groupid == groupid && exports.z_stop.initialize().save[i].blockfunction.length > 0) {
-						console.log('Match AND STOP')
-						stopmark = 1
-					}
-				}
-			}
-		}
+
 		z_stop();
 		//console.log('mainMsgAA',mainMsg)
 		if (stopmark != 1)
-			result = stop(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark)
+			result = rollbot(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark)
 
 		//z_saveCommand 功能
 		if (mainMsg && mainMsg[0].toLowerCase() == ".cmd" && mainMsg[1] && mainMsg[1].toLowerCase() != "help" && mainMsg[1].toLowerCase() != "add" && mainMsg[1].toLowerCase() != "show" && mainMsg[1].toLowerCase() != "del" && result.text) {
@@ -56,7 +47,7 @@ try {
 
 			result.text = ""
 			z_stop();
-			result = stop(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark)
+			result = rollbot(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark)
 			console.log('inputStr2: ', inputStr)
 		}
 		if (result && result.text) {
@@ -65,10 +56,19 @@ try {
 
 		}
 
-
+		function z_stop() {
+			if (exports.z_stop && exports.z_stop.initialize() && exports.z_stop.initialize().save && exports.z_stop.initialize().save[0].blockfunction && exports.z_stop.initialize().save[0].blockfunction.length > 0) {
+				for (var i = 0; i < exports.z_stop.initialize().save.length; i++) {
+					if ((new RegExp(exports.z_stop.initialize().save[i].blockfunction.join("|"), "i")).test(mainMsg[0]) && exports.z_stop.initialize().save[i].groupid == groupid && exports.z_stop.initialize().save[i].blockfunction.length > 0) {
+						console.log('Match AND STOP')
+						stopmark = 1
+					}
+				}
+			}
+		}
 	}
 
-	function stop(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark) {
+	function rollbot(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark) {
 		//在下面位置開始分析trigger
 		var breakFlag = false;
 		Object.keys(exports).forEach(v => {
