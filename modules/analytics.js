@@ -14,7 +14,7 @@ try {
 
 	//用來呼叫骰組,新增骰組的話,要寫條件式到下面呼叫 
 	//格式是 exports.骰組檔案名字.function名
-	module.exports = async function parseInput(inputStr, groupid, userid, userrole, callback) {
+	function parseInput(inputStr, groupid, userid, userrole, callback) {
 		//console.log('InputStr: ' + inputStr);
 		_isNaN = function (obj) {
 			return isNaN(parseInt(obj));
@@ -23,6 +23,11 @@ try {
 			text: '',
 			type: 'text'
 		};
+		console.log(exports)
+		for (let v of exports) {
+			console.log(v)
+		}
+		return;
 		let stopmark = 0;
 		let msgSplitor = (/\S+/ig);
 		let mainMsg = inputStr.match(msgSplitor); //定義輸入字串
@@ -130,3 +135,8 @@ try {
 } catch (e) {
 	console.log('error: ' + e)
 }
+
+module.exports = {
+	parseInput: parseInput,
+	stop: stop
+};
