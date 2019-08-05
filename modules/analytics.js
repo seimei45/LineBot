@@ -61,7 +61,7 @@ try {
 	async function roll(inputStr, groupid, userid, userrole, mainMsg, trigger) {
 		//在下面位置開始分析trigger
 		var breakFlag = false;
-		
+
 		Object.keys(exports).map(async v => {
 			if (breakFlag === true) {
 				return false;
@@ -107,7 +107,7 @@ try {
 				//if (debugmode)
 				console.log('tempsave', await exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole))
 				if (tempsave) {
-					Object.keys(tempsave).forEach(v => {
+					Object.keys(tempsave).map(v => {
 						result[v] = tempsave[v]
 						return result
 					})
