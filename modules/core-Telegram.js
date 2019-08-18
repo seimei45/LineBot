@@ -49,12 +49,22 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 			// 如希望增加修改骰組,只要修改analytics.js的條件式 和ROLL內的骰組檔案即可,然後在HELP.JS 增加說明.
 
 			let privatemsg = 0
-			if (trigger.match(/^dr/i) && mainMsg && mainMsg[1]) {
+			//DR 暗骰給自己
+			if (trigger.match(/^dr[ ]/i) && mainMsg && mainMsg[1]) {
 				privatemsg = 1
 
 				//mainMsg.shift()
 				//trigger = mainMsg[0].toString().toLowerCase()
 				ctx.message.text = ctx.message.text.replace(/^[d][r][ ]/i, '')
+
+			}
+			//DDR暗骰給指定GM
+			//要檢查有沒有指定的GM
+			if (trigger.match(/^ddr[ ]/i) && mainMsg && mainMsg[1]) {
+				privatemsg = 2
+				//mainMsg.shift()
+				//trigger = mainMsg[0].toString().toLowerCase()
+				ctx.message.text = ctx.message.text.replace(/^[d][d][r][ ]/i, '')
 
 			}
 			if (channelKeyword != '' && trigger == channelKeyword.toString().toLowerCase()) {
