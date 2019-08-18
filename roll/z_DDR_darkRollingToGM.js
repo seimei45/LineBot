@@ -20,16 +20,19 @@ try {
         return [/(^[.]drgm$)/ig, ]
     }
     getHelpMessage = function () {
-        return "【暗骰GM功能】.drgm .ddr .dr" + "\
+        return "【暗骰GM功能】.drgm .dr .ddr .dddr" + "\
         \n 這是讓你可以私骰GM的功能,\
-        \n 例如輸入 .drr cc 80 鬥毆 \
-        \n .drr 接普通指令\
+        \n 例如輸入 .ddr cc 80 鬥毆 \
+        \n 就會把結果私訊GM及自己\
+        \n 例如輸入 .dddr cc 80 鬥毆 \
+        \n 就會把結果只私訊GM\
         \n P.S.如果沒立即生效 用.drgm show 刷新一下\
     \n 輸入.drgm addgm 即可成為GM\
     \n 輸入.drgm show 顯示所有GM\
     \n 輸入.drgm del(編號)或all 即可刪除\
-    \n 輸入.ddr  (指令) 即可GM \
     \n 輸入.dr  (指令) 私訊自己 \
+    \n 輸入.ddr  (指令) 即可GM及自己 \
+    \n 輸入.dddr  (指令) 即可GM \
     \n "
     }
     initialize = function () {
