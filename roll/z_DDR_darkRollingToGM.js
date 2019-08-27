@@ -31,8 +31,8 @@ try {
     \n 輸入.drgm show 顯示所有GM\
     \n 輸入.drgm del(編號)或all 即可刪除\
     \n 輸入.dr  (指令) 私訊自己 \
-    \n 輸入.ddr  (指令) 即可GM及自己 \
-    \n 輸入.dddr  (指令) 即可GM \
+    \n 輸入.ddr(指令) 私訊GM及自己\
+    \n 輸入.dddr(指令) 私訊GM\
     \n "
     }
     initialize = function () {
