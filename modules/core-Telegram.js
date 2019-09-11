@@ -50,23 +50,30 @@ if (process.env.TELEGRAM_CHANNEL_SECRET) {
 
 			let privatemsg = 0
 			//DR 暗骰給自己
-			if (trigger.match(/^dr[ ]/i) && mainMsg && mainMsg[1]) {
+			//console.log(trigger,"!")
+			if (trigger.match(/^dr$/i) && mainMsg && mainMsg[1]) {
 				privatemsg = 1
-
 				//mainMsg.shift()
 				//trigger = mainMsg[0].toString().toLowerCase()
-				ctx.message.text = ctx.message.text.replace(/^[d][r][ ]/i, '')
-
+				ctx.message.text = ctx.message.text.replace(/^[d][r]/i, '')
 			}
 			//DDR暗骰給指定GM
 			//要檢查有沒有指定的GM
-			if (trigger.match(/^ddr[ ]/i) && mainMsg && mainMsg[1]) {
+			if (trigger.match(/^ddr$/i) && mainMsg && mainMsg[1]) {
 				privatemsg = 2
 				//mainMsg.shift()
 				//trigger = mainMsg[0].toString().toLowerCase()
-				ctx.message.text = ctx.message.text.replace(/^[d][d][r][ ]/i, '')
+				ctx.message.text = ctx.message.text.replace(/^[d][d][r]/i, '')
 
 			}
+			if (trigger.match(/^dddr$/i) && mainMsg && mainMsg[1]) {
+				privatemsg = 3
+				//mainMsg.shift()
+				//trigger = mainMsg[0].toString().toLowerCase()
+				ctx.message.text = ctx.message.text.replace(/^[d][d][d][r]/i, '')
+
+			}
+			//console.log(privatemsg,"privatemsg")
 			if (channelKeyword != '' && trigger == channelKeyword.toString().toLowerCase()) {
 				mainMsg.shift()
 				rplyVal = exports.analytics.parseInput(ctx.message.text, groupid, userid, userrole, "Telegram")
