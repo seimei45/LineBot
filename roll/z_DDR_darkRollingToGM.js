@@ -11,13 +11,13 @@ try {
     })
 
     gameName = function () {
-        return '(公測中)暗骰GM功能 .drgm (add del show 自定關鍵字)'
+        return '(公測中)暗骰GM功能 .drgm  (add del show 自定關鍵字)'
     }
     gameType = function () {
         return 'trpgDarkRolling:hktrpg'
     }
     prefixs = function () {
-        return [/(^[.]drgm$)/ig, ]
+        return [/(^[.]drgm$)/ig,]
     }
     getHelpMessage = function () {
         return "【暗骰GM功能】.drgm .dr .ddr .dddr" + "\
@@ -45,11 +45,11 @@ try {
         })
         rply.text = '';
         switch (true) {
-            case /^help$/i.test(mainMsg[1]):
+            case /^help$/i.test(mainMsg[1]) || !mainMsg[1]:
                 rply.text = this.getHelpMessage();
                 return rply;
-                // .drgm(0) ADD(1) TOPIC(2) CONTACT(3)
-            case /(^[.]drgm$)/i.test(mainMsg[0]) && /^add$/i.test(mainMsg[1]) && /^(?!(add|del|show)$)/ig.test(mainMsg[2]):
+            // .drgm(0) addgm(1) GM名字(2) 
+            case /(^[.]drgm$)/i.test(mainMsg[0]) && /^addgm$/i.test(mainMsg[1]) && /^(?!(add|del|show)$)/ig.test(mainMsg[2]):
                 //console.log('mainMsg: ', mainMsg)
                 //增加資料庫
                 //檢查有沒有重覆
