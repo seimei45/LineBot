@@ -17,7 +17,7 @@ try {
         return 'trpgDarkRolling:hktrpg'
     }
     prefixs = function () {
-        return [/(^[.]drgm$)/ig,]
+        return [/(^[.]drgm$)/ig, ]
     }
     getHelpMessage = function () {
         return "【暗骰GM功能】.drgm .dr .ddr .dddr" + "\
@@ -39,7 +39,7 @@ try {
         return rply;
     }
 
-    rollDiceDarkRolling = function (inputStr, mainMsg, groupid, userid, userrole) {
+    rollDiceCommand = function (inputStr, mainMsg, groupid, userid, userrole, sourcename, channelid, displayname) {
         records.get('trpgDarkRolling', (msgs) => {
             rply.trpgDarkRollingfunction = msgs
         })
@@ -48,13 +48,15 @@ try {
             case /^help$/i.test(mainMsg[1]) || !mainMsg[1]:
                 rply.text = this.getHelpMessage();
                 return rply;
-            // .drgm(0) addgm(1) GM名字(2) 
-            case /(^[.]drgm$)/i.test(mainMsg[0]) && /^addgm$/i.test(mainMsg[1]) && /^(?!(add|del|show)$)/ig.test(mainMsg[2]):
+                // .drgm(0) addgm(1) GM名字(2) 
+            case /(^[.]drgm$)/i.test(mainMsg[0]) && /^addgm$/i.test(mainMsg[1]):
                 //console.log('mainMsg: ', mainMsg)
                 //增加資料庫
                 //檢查有沒有重覆
+                if (mainMsg && mainMsg[2])
+                    mainMsg[2] = ""
                 let checkifsamename = 0
-                if (groupid && userrole >= 1 && mainMsg[3] && mainMsg[3].toLowerCase() != ".drgm") {
+                if (groupid && userrole >= 1 && userid) {
                     if (rply.trpgDarkRollingfunction)
                         for (var i = 0; i < rply.trpgDarkRollingfunction.length; i++) {
                             if (rply.trpgDarkRollingfunction[i].groupid == groupid) {
@@ -69,10 +71,10 @@ try {
                             }
                         }
                     let temp = {
-                        groupid: groupid,
+                        groupid: channelid || groupid,
                         trpgDarkRollingfunction: [{
-                            topic: mainMsg[2],
-                            contact: inputStr.replace(/\.drgm\s+add\s+/i, '').replace(mainMsg[2], '').replace(/^\s+/, '')
+                            topic: userid,
+                            contact: mainMsg[2] || displayname
                         }]
                     }
                     if (checkifsamename == 0) {

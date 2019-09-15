@@ -14,7 +14,7 @@ try {
 
 	//用來呼叫骰組,新增骰組的話,要寫條件式到下面呼叫 
 	//格式是 exports.骰組檔案名字.function名
-	function parseInput(inputStr, groupid, userid, userrole, name, channelid) {
+	function parseInput(inputStr, groupid, userid, userrole, sourcename, channelid, displayname) {
 		//console.log('InputStr: ' + inputStr);
 		_isNaN = function (obj) {
 			return isNaN(parseInt(obj));
@@ -33,7 +33,7 @@ try {
 		stopmark = z_stop(mainMsg, groupid);
 		//console.log('mainMsgAA',mainMsg)
 		if (stopmark != 1) {
-			result = rolldice(inputStr, groupid, userid, userrole, mainMsg, trigger, stopmark)
+			result = rolldice(inputStr, groupid, userid, userrole, mainMsg, trigger)
 			//console.log("OK")
 		}
 
@@ -118,7 +118,7 @@ try {
 
 			if (findprefixs == 1) {
 				console.log('trigger: ', trigger)
-				let tempsave = exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole)
+				let tempsave = exports[v].rollDiceCommand(inputStr, mainMsg, groupid, userid, userrole, sourcename, channelid, displayname)
 				if (tempsave)
 					Object.keys(tempsave).forEach(v => {
 						result[v] = tempsave[v]
