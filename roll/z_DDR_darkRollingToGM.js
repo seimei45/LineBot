@@ -17,7 +17,7 @@ try {
         return 'trpgDarkRolling:hktrpg'
     }
     prefixs = function () {
-        return [/(^[.]drgm$)/ig, ]
+        return [/(^[.]drgm$)/ig,]
     }
     getHelpMessage = function () {
         return "【暗骰GM功能】.drgm .dr .ddr .dddr" + "\
@@ -48,7 +48,7 @@ try {
             case /^help$/i.test(mainMsg[1]) || !mainMsg[1]:
                 rply.text = this.getHelpMessage();
                 return rply;
-                // .drgm(0) addgm(1) GM名字(2) 
+            // .drgm(0) addgm(1) GM名字(2) 
             case /(^[.]drgm$)/i.test(mainMsg[0]) && /^addgm$/i.test(mainMsg[1]):
                 //console.log('mainMsg: ', mainMsg)
                 //增加資料庫
@@ -63,7 +63,7 @@ try {
                                 // console.log('checked1')
                                 if (rply.trpgDarkRollingfunction[0] && rply.trpgDarkRollingfunction[0].trpgDarkRollingfunction[0])
                                     for (var a = 0; a < rply.trpgDarkRollingfunction[i].trpgDarkRollingfunction.length; a++) {
-                                        if (rply.trpgDarkRollingfunction[i].trpgDarkRollingfunction[a].topic == mainMsg[2]) {
+                                        if (rply.trpgDarkRollingfunction[i].trpgDarkRollingfunction[a].topic == userid) {
                                             //   console.log('checked')
                                             checkifsamename = 1
                                         }
@@ -86,16 +86,12 @@ try {
 
                         })
                         rply.text = '新增成功: ' + mainMsg[2] + '\n' + inputStr.replace(/\.drgm\s+add\s+/i, '').replace(mainMsg[2], '').replace(/^\s+/, '')
-                    } else rply.text = '新增失敗. 重複標題'
+                    } else rply.text = '新增失敗. 重覆登記GM.'
                 } else {
                     rply.text = '新增失敗.'
-                    if (!mainMsg[2])
-                        rply.text += ' 沒有標題.'
-                    if (!mainMsg[3])
-                        rply.text += ' 沒有擲骰指令'
-                    if (mainMsg[3].toLowerCase() == ".drgm")
-                        rply.text += '指令不可以儲存.drgm啊'
-                    if (!groupid)
+                    if (!userid)
+                        rply.text += ' 沒有個人ID....如果是LINE的話, 要先LIKE 這個BOT.'
+                    if (!groupid && !channelid)
                         rply.text += ' 不在群組.'
                     if (groupid && userrole < 1)
                         rply.text += ' 只有GM以上才可新增.'
@@ -119,7 +115,7 @@ try {
                     }
                 } else {
                     rply.text = '刪除失敗.'
-                    if (!groupid)
+                    if (!groupid && !channelid)
                         rply.text += '不在群組. '
                     if (groupid && userrole < 1)
                         rply.text += '只有GM以上才可刪除. '
@@ -145,8 +141,8 @@ try {
                 } else {
                     rply.text = '刪除失敗.'
                     if (!mainMsg[2])
-                        rply.text += '沒有關鍵字. '
-                    if (!groupid)
+                        rply.text += '沒有刪除目標. '
+                    if (!groupid && !channelid)
                         rply.text += '不在群組. '
                     if (groupid && userrole < 1)
                         rply.text += '只有GM以上才可刪除. '
@@ -167,7 +163,7 @@ try {
                                 rply.text += '資料庫列表:'
                                 for (var a = 0; a < rply.trpgDarkRollingfunction[i].trpgDarkRollingfunction.length; a++) {
                                     temp = 1
-                                    rply.text += ("\n") + a + '. ' + rply.trpgDarkRollingfunction[i].trpgDarkRollingfunction[a].topic + '\n' + rply.trpgDarkRollingfunction[i].trpgDarkRollingfunction[a].contact + '\n'
+                                    rply.text += ("\n") + a + '. ' + rply.trpgDarkRollingfunction[i].trpgDarkRollingfunction[a].contact + '\n'
                                 }
                             }
                         }
