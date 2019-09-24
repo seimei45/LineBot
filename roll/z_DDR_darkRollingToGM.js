@@ -160,7 +160,7 @@ try {
                     if (rply.trpgDarkRollingfunction)
                         for (var i = 0; i < rply.trpgDarkRollingfunction.length; i++) {
                             if (rply.trpgDarkRollingfunction[i].groupid == groupid) {
-                                rply.text += '資料庫列表:'
+                                rply.text += 'GM列表:'
                                 for (var a = 0; a < rply.trpgDarkRollingfunction[i].trpgDarkRollingfunction.length; a++) {
                                     temp = 1
                                     rply.text += ("\n") + a + '. ' + rply.trpgDarkRollingfunction[i].trpgDarkRollingfunction[a].contact + '\n'
