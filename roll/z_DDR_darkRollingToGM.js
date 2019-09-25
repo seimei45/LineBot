@@ -17,7 +17,7 @@ try {
         return 'trpgDarkRolling:hktrpg'
     }
     prefixs = function () {
-        return [/(^[.]drgm$)/ig,]
+        return [/(^[.]drgm$)/ig, ]
     }
     getHelpMessage = function () {
         return "【暗骰GM功能】.drgm .dr .ddr .dddr" + "\
